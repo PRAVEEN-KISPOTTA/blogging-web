@@ -1,18 +1,43 @@
-import { useState } from "react";         // imported "state" library in functional component
+import { useRef, useEffect, useState, useReducer } from "react";         // imported "state" library in functional component
 import styled from "styled-components";  //  imported library for using "styled"
+
+function blogReducer(state, action){
+    switch(action.type){
+        case "ADD":
+            return [action.blogs, ...state];
+        case "REMOVE":
+            return state.filter((blog, index)=> index !== action.index);
+            default:
+                return [];
+    }
+}
 
 function Blogging(){        // main function where all the sub-func as well as UI part has been done
     // const [title, setTitle] = useState("");     //created "state" for "title"
     // const [content, setContent] = useState("");     //created "state" for "content"
 
     const [formData, setFormData] = useState({title: "", content: ""});
-    const [blog, setBlog] = useState([]);       //created "state" for "blog" with a value of array to store multiple blog
+    //const [blog, setBlog] = useState([]);       //created "state" for "blog" with a value of array to store multiple blog
+    const [blog, dispatch] = useReducer(blogReducer, [])
+    const titleRef = useRef(null);
+
+    useEffect(()=>{
+        titleRef.current.focus();   //focusing only in initial render
+    }, []);
+
+    useEffect(()=>{
+        if(blog.length){
+            document.title = blog[0].title;
+        }
+    })
 
     const handleSubmit = (event) =>{        //this func handle the submission of form. It triggered when user submit the form element
 
         event.preventDefault();     //It helps to prevent the default behaviour
         // setBlog([{title, content}, ...blog]);       //storing "title" & "content" in a "blog" and used spread operator to get new blog as well as old blog
-        setBlog([{title: formData.title, content: formData.content}, ...blog]);
+
+        // setBlog([{title: formData.title, content: formData.content}, ...blog]);
+        dispatch({type: "ADD", blogs:{title: formData.title, content: formData.content}});
         // setBlog([formData, ...blog])
 
         // console.log("title - ", title);     //consoling title
@@ -22,7 +47,11 @@ function Blogging(){        // main function where all the sub-func as well as U
 
         // setTitle('');       //setting empty value for title after clicking the submit btn
         // setContent('');     //setting empty value for content after clicking the  submit btn
-        setFormData({title: "", content: ""});
+
+        setFormData({title: "", content: ""});      //empty the input field after clicking the add button
+        titleRef.current.focus();       //It focuses the title input field automatically after clicking on add button
+        
+        console.log("titleRef - ", titleRef.current);
 
     }
 
@@ -41,7 +70,8 @@ function Blogging(){        // main function where all the sub-func as well as U
         // updatedBlog.splice(i, 1);        //removing 1 element froma particular index (i) of the given array 
         // setBlog(updatedBlog);        //updating the setBlog after removing the element
 
-        setBlog(blog.filter((blog, index)=> i !== index));      //another method to delete the particular index
+        // setBlog(blog.filter((blog, index)=> i !== index));      //another method to delete the particular index
+        dispatch({type: "REMOVE", index: i})
     }
 
         return(
@@ -53,7 +83,9 @@ function Blogging(){        // main function where all the sub-func as well as U
                                 name="title" placeholder="Write your title" 
                                 onChange={handleTitleChange}
                                 value={formData.title}
-                                id="clearTitleInput" required></Input>
+                                id="clearTitleInput"
+                                ref={titleRef}
+                                required></Input>
                     </div>
 
                     <div style={divCenter}>
@@ -63,7 +95,8 @@ function Blogging(){        // main function where all the sub-func as well as U
                                     placeholder="Write your content" 
                                     onChange={handleContentChange}
                                     value={formData.content} 
-                                    id="clearContentInput" required></Textarea>
+                                    id="clearContentInput"
+                                    required></Textarea>
                     </div>
 
                     <button style={btn} type="submit">Add</button>
