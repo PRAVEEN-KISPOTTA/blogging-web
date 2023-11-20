@@ -71,7 +71,6 @@ class Blogging extends Component{
 const Div = styled.div`
 height: 100vh;
   margin-top: 20px;
-//   border: 2px solid black;
   text-align: center; /* Center child elements horizontally */
 `
 

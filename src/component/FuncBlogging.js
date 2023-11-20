@@ -159,7 +159,6 @@ const divCenter = {
 }
 
 const List = styled.div`
-    // background-color: #2196f3;
     color: green;
     width: 50%;
     margin-left: 25%;
