@@ -119,13 +119,11 @@ function Blogging(){        // main function where all the sub-func as well as U
 
 const Div = styled.div`
 height: 94vh;
-//   margin-top: 20px;
 padding: 20px;
-//   border: 2px solid black;
-  text-align: center; /* Center child elements horizontally */
-  font-family: cursive;
-  background-image: url("https://github.com/PRAVEEN-KISPOTTA/project_image/blob/main/wrinkled-2537807.jpg?raw=true");
-  background-size: contain;
+text-align: center; /* Center child elements horizontally */
+font-family: cursive;
+background-image: url("https://github.com/PRAVEEN-KISPOTTA/project_image/blob/main/wrinkled-2537807.jpg?raw=true");
+background-size: contain;
 `
 
 
